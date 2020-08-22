@@ -18,6 +18,18 @@ class _PriceScreenState extends State<PriceScreen> {
 
   List<Text> currencyList;
 
+  DropdownButton<String> getDropdownButton() {
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      items: getDropDownItems(),
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value;
+        });
+      },
+    );
+  }
+
   List<DropdownMenuItem> getDropDownItems() {
     List<DropdownMenuItem<String>> dropDownMenuItems = [];
     for (int i = 0; i < coin_data.currenciesList.length; i++) {
@@ -75,7 +87,6 @@ class _PriceScreenState extends State<PriceScreen> {
               },
               itemExtent: 32.0,
               children: currencyList,
-
             ),
           ),
         ],
@@ -83,13 +94,3 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 }
-
-//DropdownButton<String>(
-//value: selectedCurrency,
-//items: getDropDownItems(),
-//onChanged: (value){
-//setState(() {
-//selectedCurrency = value;
-//});
-//},
-//),
