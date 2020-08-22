@@ -8,6 +8,9 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+
+  List<Text> currencyList;
+
   List<Text> returnText() {
     List<Text> currencyList = [];
     for (String currency in coin_data.currenciesList) {
@@ -15,8 +18,16 @@ class _PriceScreenState extends State<PriceScreen> {
     }
     return currencyList;
   }
+  CupertinoPicker getCupertinoPicker(){
+    return CupertinoPicker(
+      onSelectedItemChanged: (int selectedIndex) {
+        print(currencyList[selectedIndex]);
+      },
+      itemExtent: 32.0,
+      children: currencyList,
+    );
+  }
 
-  List<Text> currencyList;
 
   DropdownButton<String> getDropdownButton() {
     return DropdownButton<String>(
@@ -81,13 +92,7 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: CupertinoPicker(
-              onSelectedItemChanged: (int selectedIndex) {
-                print(currencyList[selectedIndex]);
-              },
-              itemExtent: 32.0,
-              children: currencyList,
-            ),
+            child: ,
           ),
         ],
       ),
