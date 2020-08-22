@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bitcoin_ticker/coin_data.dart' as coin_data;
+import 'package:flutter/cupertino.dart';
 
 class PriceScreen extends StatefulWidget {
   @override
