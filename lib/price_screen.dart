@@ -7,12 +7,20 @@ class PriceScreen extends StatefulWidget {
   _PriceScreenState createState() => _PriceScreenState();
 }
 
-
 class _PriceScreenState extends State<PriceScreen> {
+  List<Text> returnText() {
+    List<Text> currencyList = [];
+    for (String currency in coin_data.currenciesList) {
+      currencyList.add(Text(currency));
+    }
+    return currencyList;
+  }
 
-  List<DropdownMenuItem> getDropDownItems(){
+  List<Text> currencyList;
+
+  List<DropdownMenuItem> getDropDownItems() {
     List<DropdownMenuItem<String>> dropDownMenuItems = [];
-    for (int i=0;i<coin_data.currenciesList.length;i++){
+    for (int i = 0; i < coin_data.currenciesList.length; i++) {
       var newItem = DropdownMenuItem(
         child: Text(coin_data.currenciesList[i]),
         value: coin_data.currenciesList[i],
@@ -21,9 +29,12 @@ class _PriceScreenState extends State<PriceScreen> {
     }
     return dropDownMenuItems;
   }
+
   String selectedCurrency;
+
   @override
   Widget build(BuildContext context) {
+    currencyList = returnText();
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
@@ -58,14 +69,13 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-              value: selectedCurrency,
-              items: getDropDownItems(),
-              onChanged: (value){
-                setState(() {
-                  selectedCurrency = value;
-                });
+            child: CupertinoPicker(
+              onSelectedItemChanged: (int selectedIndex) {
+                print(currencyList[selectedIndex]);
               },
+              itemExtent: 32.0,
+              children: currencyList,
+
             ),
           ),
         ],
@@ -73,3 +83,13 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 }
+
+//DropdownButton<String>(
+//value: selectedCurrency,
+//items: getDropDownItems(),
+//onChanged: (value){
+//setState(() {
+//selectedCurrency = value;
+//});
+//},
+//),
