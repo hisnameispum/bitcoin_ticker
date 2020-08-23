@@ -10,6 +10,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
 
+
   List<Text> currencyList;
 
   List<Text> returnText() {
@@ -60,6 +61,7 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const apiKey = '05EE6727-F13B-4F59-B60A-6B4CF8AE7E69';
     currencyList = returnText();
     return Scaffold(
       appBar: AppBar(
