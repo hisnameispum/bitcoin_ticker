@@ -1,4 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 const List<String> currenciesList = [
   'AUD',
@@ -30,14 +32,32 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
+const coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
+const apiKey = '05EE6727-F13B-4F59-B60A-6B4CF8AE7E69';
+
 class CoinData {
   String rate;
 
+  Future getCoinData() async {
+      //4. Create a url combining the coinAPIURL with the currencies we're interested, BTC to USD.
+    String requestURL = '$coinAPIURL/BTC/USD?apikey=$apiKey';
+      //5. Make a GET request to the URL and wait for the response.
+    http.Response response = await http.get(requestURL);
 
-  void getCoinData() async{
-    const apiKey = '05EE6727-F13B-4F59-B60A-6B4CF8AE7E69';
-    const url= 'curl https://rest.coinapi.io/v1/exchangerate/BTC/USD \ --request GET --header "X-CoinAPI-Key: ${apiKey} ';
-    http.Response response = await http.get(url);
-    print(response.body);
+      //6. Check that the request was successful.
+    if (response.statusCode == 200) {
+        //7. Use the 'dart:convert' package to decode the JSON data that comes back from coinapi.io.
+      var decodedData = jsonDecode(response.body);
+        //8. Get the last price of bitcoin with the key 'last'.
+      var lastPrice = decodedData['rate'];
+        //9. Output the lastPrice from the method.
+      return lastPrice;
+    } else {
+        //10. Handle any errors that occur during the request.
+      print(response.statusCode);
+        //Optional: throw an error if our request fails.
+      throw 'Problem with the get request';
+    }
+
   }
 }
