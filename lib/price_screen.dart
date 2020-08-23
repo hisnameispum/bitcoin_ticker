@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bitcoin_ticker/coin_data.dart' as coin_data;
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 
 import 'dart:io' show Platform;
 
@@ -11,6 +10,8 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+
+  coin_data.CoinData coinData = coin_data.CoinData();
 
 
   List<Text> currencyList;
@@ -63,8 +64,6 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const apiKey = '05EE6727-F13B-4F59-B60A-6B4CF8AE7E69';
-    const url= 'curl https://rest.coinapi.io/v1/exchangerate/BTC/USD \ --request GET --header "X-CoinAPI-Key: ${apiKey} ';
 
     currencyList = returnText();
     return Scaffold(
