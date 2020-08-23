@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bitcoin_ticker/coin_data.dart' as coin_data;
 import 'package:flutter/cupertino.dart';
-
+import 'coin_data.dart';
 import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
@@ -10,64 +9,70 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+  String selectedCurrency = 'USD';
 
-  coin_data.CoinData coinData = coin_data.CoinData();
-
-
-  List<Text> currencyList;
-
-  List<Text> returnText() {
-    List<Text> currencyList = [];
-    for (String currency in coin_data.currenciesList) {
-      currencyList.add(Text(currency));
+  DropdownButton<String> androidDropdown() {
+    List<DropdownMenuItem<String>> dropdownItems = [];
+    for (String currency in currenciesList) {
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      dropdownItems.add(newItem);
     }
-    return currencyList;
-  }
-  CupertinoPicker getCupertinoPicker(){
-    return CupertinoPicker(
-      onSelectedItemChanged: (int selectedIndex) {
-        print(currencyList[selectedIndex]);
-        coinData.getCoinData();
-      },
-      itemExtent: 32.0,
-      children: currencyList,
-    );
-  }
 
-
-
-
-  DropdownButton<String> getDropdownButton() {
     return DropdownButton<String>(
       value: selectedCurrency,
-      items: getDropDownItems(),
+      items: dropdownItems,
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
-          coinData.getCoinData();
         });
       },
     );
   }
 
-  List<DropdownMenuItem> getDropDownItems() {
-    List<DropdownMenuItem<String>> dropDownMenuItems = [];
-    for (int i = 0; i < coin_data.currenciesList.length; i++) {
-      var newItem = DropdownMenuItem(
-        child: Text(coin_data.currenciesList[i]),
-        value: coin_data.currenciesList[i],
-      );
-      dropDownMenuItems.add(newItem);
+  CupertinoPicker iOSPicker() {
+    List<Text> pickerItems = [];
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
     }
-    return dropDownMenuItems;
+
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      itemExtent: 32.0,
+      onSelectedItemChanged: (selectedIndex) {
+        print(selectedIndex);
+      },
+      children: pickerItems,
+    );
   }
 
-  String selectedCurrency;
+  //12. Create a variable to hold the value and use in our Text Widget. Give the variable a starting value of '?' before the data comes back from the async methods.
+  String bitcoinValueInUSD = '?';
+
+  //11. Create an async method here await the coin data from coin_data.dart
+  void getData() async {
+    try {
+      double data = await CoinData().getCoinData();
+      //13. We can't await in a setState(). So you have to separate it out into two steps.
+      setState(() {
+        bitcoinValueInUSD = data.toStringAsFixed(0);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //14. Call getData() when the screen loads up. We can't call CoinData().getCoinData() directly here because we can't make initState() async.
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    currencyList = returnText();
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
@@ -87,7 +92,8 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ? USD',
+                  //15. Update the Text Widget with the data in bitcoinValueInUSD.
+                  '1 BTC = $bitcoinValueInUSD USD',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -102,7 +108,7 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: Platform.isAndroid? getDropdownButton(): getCupertinoPicker(),
+            child: Platform.isIOS ? iOSPicker() : androidDropdown(),
           ),
         ],
       ),
