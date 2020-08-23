@@ -27,6 +27,7 @@ class _PriceScreenState extends State<PriceScreen> {
     return CupertinoPicker(
       onSelectedItemChanged: (int selectedIndex) {
         print(currencyList[selectedIndex]);
+        coinData.getCoinData();
       },
       itemExtent: 32.0,
       children: currencyList,
@@ -43,6 +44,7 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
+          coinData.getCoinData();
         });
       },
     );
