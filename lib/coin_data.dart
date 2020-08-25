@@ -36,7 +36,7 @@ const apiKey = '05EE6727-F13B-4F59-B60A-6B4CF8AE7E69';
 
 class CoinData {
   //3. Create the Asynchronous method getCoinData() that returns a Future (the price data).
-  Future getCoinData() async {
+  Future getCoinData(String currency) async {
     //4. Create a url combining the coinAPIURL with the currencies we're interested, BTC to USD.
     String requestURL = '$coinAPIURL/BTC/USD?apikey=$apiKey';
     //5. Make a GET request to the URL and wait for the response.

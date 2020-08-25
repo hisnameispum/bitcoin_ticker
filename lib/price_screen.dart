@@ -49,7 +49,7 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   //12. Create a variable to hold the value and use in our Text Widget. Give the variable a starting value of '?' before the data comes back from the async methods.
-  String bitcoinValueInUSD = '?';
+  String bitcoinValue = '?';
 
   //11. Create an async method here await the coin data from coin_data.dart
   void getData() async {
@@ -57,7 +57,7 @@ class _PriceScreenState extends State<PriceScreen> {
       double data = await CoinData().getCoinData();
       //13. We can't await in a setState(). So you have to separate it out into two steps.
       setState(() {
-        bitcoinValueInUSD = data.toStringAsFixed(0);
+        bitcoinValue = data.toStringAsFixed(0);
       });
     } catch (e) {
       print(e);
@@ -93,7 +93,7 @@ class _PriceScreenState extends State<PriceScreen> {
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
                   //15. Update the Text Widget with the data in bitcoinValueInUSD.
-                  '1 BTC = $bitcoinValueInUSD USD',
+                  '1 BTC = $bitcoinValue ${selectedCurrency}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
